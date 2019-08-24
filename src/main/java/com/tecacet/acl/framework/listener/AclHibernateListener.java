@@ -6,12 +6,15 @@ import org.hibernate.persister.entity.EntityPersister;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import com.tecacet.acl.framework.AclSecured;
 import com.tecacet.acl.framework.PermissionType;
-import com.tecacet.acl.framework.dao.AclObjectIdentityDao;
+import com.tecacet.acl.framework.dao.AclDao;
 
+/**
+ * Listen to insert events. If the object inserted is subject to entitlements, ie annotated with AclSecured,
+ * then insert a row in acl_object_identity with a defauly owner and permissions
+ */
 @Component
 public class AclHibernateListener implements PostInsertEventListener {
 
@@ -19,11 +22,11 @@ public class AclHibernateListener implements PostInsertEventListener {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    private final AclObjectIdentityDao objectIdentityDao;
+    private final AclDao aclDao;
 
     @Autowired
-    public AclHibernateListener(AclObjectIdentityDao dao) {
-        this.objectIdentityDao = dao;
+    public AclHibernateListener(AclDao dao) {
+        this.aclDao = dao;
     }
 
     @Override
@@ -43,7 +46,7 @@ public class AclHibernateListener implements PostInsertEventListener {
         if (clazz.isAnnotationPresent(AclSecured.class)) {
             AclSecured secured = (AclSecured) clazz.getAnnotation(AclSecured.class);
             logger.info("Inserting new id");
-            objectIdentityDao.insertObjectIdentity((Long)postInsertEvent.getId(), secured.name(),
+            aclDao.insertObjectIdentity((Long)postInsertEvent.getId(), secured.name(),
                     DEFAULT_ROLE, PermissionType.READ);
         }
 

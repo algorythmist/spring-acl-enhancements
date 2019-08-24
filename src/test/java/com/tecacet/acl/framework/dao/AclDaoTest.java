@@ -7,7 +7,6 @@ import java.util.Optional;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.data.jdbc.DataJdbcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.tecacet.acl.framework.PermissionType;
@@ -15,10 +14,10 @@ import com.tecacet.acl.framework.PermissionType;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
 @Transactional
-public class AclObjectIdentityDaoTest {
+public class AclDaoTest {
 
     @Autowired
-    private AclObjectIdentityDao dao;
+    private AclDao dao;
 
     @Test
     public void findObjectClassId() {
@@ -38,9 +37,4 @@ public class AclObjectIdentityDaoTest {
         assertEquals(2L, id.get().longValue());
     }
 
-    @Test
-    public void insertObjectIdentity() {
-        dao.insertObjectIdentity(10, "CUSTOMER", "manager",
-                PermissionType.READ, PermissionType.WRITE);
-    }
 }

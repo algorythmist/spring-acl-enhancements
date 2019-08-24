@@ -23,15 +23,13 @@ public class RestaurantRepositoryTest {
     private RestaurantRepository restaurantRepository;
 
     @Test
-    public void testA_insertRestaurant() {
+    public void insertRestaurant() {
         Restaurant restaurant = new Restaurant("Arrabiato", "123 Naples 3");
         restaurantRepository.save(restaurant);
-    }
 
-    @Test
-    public void testB_queryRestaurant() {
         Optional<Restaurant> opt = restaurantRepository.findByName("Arrabiato");
         assertTrue(opt.isPresent());
         assertEquals("123 Naples 3", opt.get().getAddress());
     }
+
 }

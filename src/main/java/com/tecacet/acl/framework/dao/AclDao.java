@@ -5,12 +5,14 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.acls.model.NotFoundException;
-import org.springframework.security.acls.model.Permission;
 import org.springframework.stereotype.Service;
 import com.tecacet.acl.framework.PermissionType;
 
+/**
+ * JDBC data access layer for ACL entitlements
+ */
 @Service
-public class AclObjectIdentityDao {
+public class AclDao {
 
     private static final String INSERT_ACL =
             "INSERT INTO acl_object_identity ( `object_id_class`, `object_id_identity`, `parent_object`, `owner_sid`, `entries_inheriting`) VALUES (?, ?, ?, ?, ?)";
@@ -22,7 +24,7 @@ public class AclObjectIdentityDao {
     private final JdbcTemplate jdbcTemplate;
 
     @Autowired
-    public AclObjectIdentityDao(JdbcTemplate jdbcTemplate) {
+    public AclDao(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
@@ -51,11 +53,15 @@ public class AclObjectIdentityDao {
 
     private void insertAccessControlEntries(long objectIdentityId, long sidId,
                                          PermissionType... permissions) {
-        //TODO batch insert
         for (int order = 0; order < permissions.length; order++) {
             jdbcTemplate.update(INSERT_ENTRY,
                     objectIdentityId, order, sidId, permissions[order].getType(), 1,1,1);
 
         }
+    }
+
+    public void deleteAllEntitlements() {
+        jdbcTemplate.update("delete from acl_entry");
+        jdbcTemplate.update("delete from acl_object_identity");
     }
 }

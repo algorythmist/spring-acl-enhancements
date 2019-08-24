@@ -3,6 +3,7 @@ package com.tecacet.acl;
 import static org.junit.Assert.assertEquals;
 
 import java.util.List;
+import org.junit.After;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,6 +19,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.tecacet.acl.entity.Customer;
 import com.tecacet.acl.entity.Restaurant;
+import com.tecacet.acl.framework.dao.AclDao;
 import com.tecacet.acl.repository.CustomerRepository;
 import com.tecacet.acl.repository.RestaurantRepository;
 
@@ -35,6 +37,9 @@ public class AclEnhancementsDemoTest {
 
     @Autowired
     private AclService aclService;
+
+    @Autowired
+    private AclDao aclDao;
 
     @Test
     public void testA_createRestaurant() {
@@ -64,4 +69,13 @@ public class AclEnhancementsDemoTest {
         List<Customer> customers = customerRepository.findAll();
         assertEquals(1, customers.size());
     }
+
+
+    @Test
+    public void testD_cleanUp() {
+        aclDao.deleteAllEntitlements();
+        restaurantRepository.deleteAll();
+        customerRepository.deleteAll();
+    }
+
 }
