@@ -19,6 +19,7 @@ import org.springframework.security.acls.jdbc.BasicLookupStrategy;
 import org.springframework.security.acls.jdbc.JdbcMutableAclService;
 import org.springframework.security.acls.jdbc.LookupStrategy;
 import org.springframework.security.acls.model.AclService;
+import org.springframework.security.acls.model.MutableAclService;
 import org.springframework.security.acls.model.PermissionGrantingStrategy;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import com.tecacet.acl.framework.IdentityModifyingAclService;
@@ -65,7 +66,7 @@ public class AclSampleConfiguration {
     }
 
     @Bean
-    public AclService aclService(LookupStrategy lookupStrategy, EhCacheBasedAclCache aclCache) {
+    public MutableAclService aclService(LookupStrategy lookupStrategy, EhCacheBasedAclCache aclCache) {
         return new IdentityModifyingAclService(
                 new JdbcMutableAclService(dataSource, lookupStrategy, aclCache));
     }

@@ -6,7 +6,10 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import org.springframework.security.acls.domain.ObjectIdentityImpl;
 import org.springframework.security.acls.model.Acl;
-import org.springframework.security.acls.model.AclService;
+import org.springframework.security.acls.model.AlreadyExistsException;
+import org.springframework.security.acls.model.ChildrenExistException;
+import org.springframework.security.acls.model.MutableAcl;
+import org.springframework.security.acls.model.MutableAclService;
 import org.springframework.security.acls.model.NotFoundException;
 import org.springframework.security.acls.model.ObjectIdentity;
 import org.springframework.security.acls.model.Sid;
@@ -15,11 +18,12 @@ import org.springframework.security.acls.model.Sid;
  * This class enhances an existing AclService by modifying the "type" aspect of the ObjectIdentity
  * Instead of using the full class name as 'type', it gets the type from the AclSecured annotation.
  */
-public class IdentityModifyingAclService implements AclService {
+//TODO implement this with AOP
+public class IdentityModifyingAclService implements MutableAclService {
 
-    private final AclService delegate;
+    private final MutableAclService delegate;
 
-    public IdentityModifyingAclService(AclService delegate) {
+    public IdentityModifyingAclService(MutableAclService delegate) {
         this.delegate = delegate;
     }
 
@@ -64,5 +68,21 @@ public class IdentityModifyingAclService implements AclService {
     @Override
     public Map<ObjectIdentity, Acl> readAclsById(List<ObjectIdentity> list, List<Sid> sids) throws NotFoundException {
         return delegate.readAclsById(replaceAll(list), sids);
+    }
+
+
+    @Override
+    public MutableAcl createAcl(ObjectIdentity objectIdentity) throws AlreadyExistsException {
+        return delegate.createAcl(objectIdentity);
+    }
+
+    @Override
+    public void deleteAcl(ObjectIdentity objectIdentity, boolean deleteChildren) throws ChildrenExistException {
+        delegate.deleteAcl(objectIdentity, deleteChildren);
+    }
+
+    @Override
+    public MutableAcl updateAcl(MutableAcl mutableAcl) throws NotFoundException {
+        return delegate.updateAcl(mutableAcl);
     }
 }
