@@ -128,3 +128,7 @@ public class AclHibernateListener implements PostInsertEventListener {
 
     }
 ``` 
+
+An example of a complete workflow of assigning permissions for different users 
+and roles can be found in the test *AclEnhancementsDemoTest*
+

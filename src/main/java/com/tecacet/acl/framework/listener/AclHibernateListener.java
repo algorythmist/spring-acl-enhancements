@@ -3,8 +3,6 @@ package com.tecacet.acl.framework.listener;
 import org.hibernate.event.spi.PostInsertEvent;
 import org.hibernate.event.spi.PostInsertEventListener;
 import org.hibernate.persister.entity.EntityPersister;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.acls.domain.BasePermission;
 import org.springframework.stereotype.Component;
@@ -20,10 +18,12 @@ public class AclHibernateListener implements PostInsertEventListener {
 
     private static final String DEFAULT_ROLE = "manager";
 
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    private final AclDataAccessService aclService;
 
     @Autowired
-    private AclDataAccessService aclService;
+    public AclHibernateListener(AclDataAccessService aclService) {
+        this.aclService = aclService;
+    }
 
     @Override
     public boolean requiresPostCommitHanding(EntityPersister entityPersister) {
@@ -40,9 +40,7 @@ public class AclHibernateListener implements PostInsertEventListener {
         Object entity = postInsertEvent.getEntity();
         Class clazz = entity.getClass();
         if (clazz.isAnnotationPresent(AclSecured.class)) {
-            aclService.insertObjectIdentity(entity, (long) postInsertEvent.getId(), "manager",
-                    BasePermission.READ);
-
+            aclService.insertObjectIdentity(clazz, (long) postInsertEvent.getId(), DEFAULT_ROLE, BasePermission.READ);
         }
 
     }
