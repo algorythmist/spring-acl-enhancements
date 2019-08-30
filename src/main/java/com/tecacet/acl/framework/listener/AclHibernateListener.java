@@ -11,7 +11,7 @@ import com.tecacet.acl.framework.AclSecured;
 
 /**
  * Listen to insert events. If the object inserted is subject to entitlements, ie annotated with AclSecured,
- * then insert a row in acl_object_identity with a defauly owner and permissions
+ * then insert a row in acl_object_identity with a default owner and permissions
  */
 @Component
 public class AclHibernateListener implements PostInsertEventListener {
@@ -27,11 +27,6 @@ public class AclHibernateListener implements PostInsertEventListener {
 
     @Override
     public boolean requiresPostCommitHanding(EntityPersister entityPersister) {
-        return false;
-    }
-
-    @Override
-    public boolean requiresPostCommitHandling(EntityPersister persister) {
         return false;
     }
 
