@@ -42,4 +42,9 @@ public class Customer {
     public String getPhoneNumber() {
         return phoneNumber;
     }
+
+    @Override
+    public String toString() {
+        return String.format("%s %s (%s)", firstName, lastName, phoneNumber);
+    }
 }

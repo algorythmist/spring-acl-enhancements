@@ -22,6 +22,7 @@ import org.springframework.security.acls.model.AclService;
 import org.springframework.security.acls.model.MutableAclService;
 import org.springframework.security.acls.model.PermissionGrantingStrategy;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+
 import com.tecacet.acl.framework.IdentityModifyingAclService;
 
 @Configuration
@@ -60,7 +61,7 @@ public class AclSampleConfiguration {
 
     @Bean
     public LookupStrategy lookupStrategy(EhCacheBasedAclCache aclCache,
-                                         AclAuthorizationStrategy aclAuthorizationStrategy) {
+            AclAuthorizationStrategy aclAuthorizationStrategy) {
         return new BasicLookupStrategy(dataSource,
                 aclCache, aclAuthorizationStrategy, new ConsoleAuditLogger());
     }
@@ -79,4 +80,5 @@ public class AclSampleConfiguration {
         expressionHandler.setPermissionCacheOptimizer(new AclPermissionCacheOptimizer(aclService));
         return expressionHandler;
     }
+
 }

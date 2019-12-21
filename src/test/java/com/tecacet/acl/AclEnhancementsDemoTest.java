@@ -118,11 +118,21 @@ public class AclEnhancementsDemoTest {
     }
 
     /**
+     * Query customers as assistant - Can see customer 2
+     */
+    @Test
+    @WithMockUser(username = "assistant")
+    public void testG_queryCustomersAsAssistant() {
+        List<Customer> customers = customerRepository.findAll();
+        assertEquals(1, customers.size());
+        assertEquals("Harry", customers.get(0).getFirstName());
+    }
+
+    /**
      * This test is non-transactional, so cleaning up
      */
     @Test
     public void testZ_cleanUp() {
-        //aclDao.deleteAllEntitlements();
         restaurantRepository.deleteAll();
         customerRepository.deleteAll();
     }

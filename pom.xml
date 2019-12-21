@@ -17,6 +17,7 @@
 		<java.version>1.8</java.version>
 		<spring-cloud.version>Greenwich.SR2</spring-cloud.version>
 		<ehcache.version>2.6.11</ehcache.version>
+		<javafaker.version>1.0.1</javafaker.version>
 	</properties>
 
 	<dependencies>
@@ -48,6 +49,11 @@
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.github.javafaker</groupId>
+			<artifactId>javafaker</artifactId>
+			<version>${javafaker.version}</version>
 		</dependency>
 		<!-- test -->
 		<dependency>
